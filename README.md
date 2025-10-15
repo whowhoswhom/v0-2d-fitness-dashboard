@@ -1,26 +1,28 @@
-# GymBuddy - 3D Interactive Fitness Dashboard
+# GYMBUDDY - Interactive Fitness Dashboard
 
-A Tesla-inspired fitness dashboard with an interactive 3D muscle anatomy model built with Next.js, React Three Fiber, and Zustand.
+A Tesla-inspired fitness dashboard with clickable 2D muscle anatomy visualization, real-time exercise data from ExerciseDB, and workout tracking.
 
-## Features
+## ✨ Features
 
-- **Interactive 3D Muscle Model**: Click on muscle groups to view detailed exercise information
-- **Animated Highlighting**: Smooth emissive material transitions on hover and selection
-- **Slide-in Panel**: Detailed muscle information with exercises, training tips, and performance guidance
-- **Progress Tracking**: Heat maps and volume charts to visualize training intensity
-- **Workout Programs**: Curated training programs with difficulty levels and target muscle groups
-- **Dark Tesla-Style UI**: Minimalist design with smooth animations and electric accents
+- **Interactive Muscle Selector**: Click any muscle group to view detailed information
+- **Front & Back Views**: Toggle between anterior and posterior anatomical perspectives
+- **Real-Time Exercise Data**: Powered by ExerciseDB API with 1,500+ exercises
+- **Exercise Library**: Animated GIFs, instructions, and equipment requirements
+- **Progress Tracking**: Heat maps and volume charts for training visualization
+- **Workout Programs**: Curated training programs with difficulty levels
+- **Dark Tesla-Style UI**: Minimalist design with smooth animations
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 - **Framework**: Next.js 15 (App Router)
-- **3D Graphics**: React Three Fiber + Drei
+- **Muscle Visualization**: react-body-highlighter (2D SVG)
+- **Exercise API**: ExerciseDB via RapidAPI
 - **State Management**: Zustand
 - **Animations**: Framer Motion
 - **Styling**: Tailwind CSS v4
 - **TypeScript**: Full type safety
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Installation
 
@@ -34,66 +36,44 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-### Adding a Custom 3D Model (Optional)
+### ExerciseDB API Setup
 
-The app currently uses simplified geometry as a fallback. For the full experience with anatomically accurate muscles:
+1. Get your RapidAPI key from [ExerciseDB on RapidAPI](https://rapidapi.com/justin-WFnsXH_t6/api/exercisedb)
+2. Add to your environment variables:
 
-1. **Prepare your GLB file** with named muscle submeshes:
-   - `Pecs_L`, `Pecs_R`
-   - `Deltoid_Ant_L`, `Deltoid_Ant_R`
-   - `Biceps_L`, `Biceps_R`
-   - `Quads_RectusFem_L`, `Quads_RectusFem_R`
-   - `Quads_VastusLat_L`, `Quads_VastusLat_R`
-   - `Hamstrings_L`, `Hamstrings_R`
-   - `Glute_L`, `Glute_R`
-   - `Calf_L`, `Calf_R`
-   - `Abs_Rectus`
-   - `Obliques_L`, `Obliques_R`
+\`\`\`bash
+# In Vercel dashboard or .env.local
+RAPIDAPI_KEY=your_key_here
+\`\`\`
 
-2. **Export settings** (Blender):
-   - Format: GLB (Binary)
-   - Scale: 1.0 (meters)
-   - Y-up axis
-   - One mesh per muscle (not combined)
-   - Optional: DRACO compression + KTX2 textures
+3. The app will automatically fetch real exercise data with GIFs and instructions
 
-3. **Add to project**:
-   \`\`\`bash
-   # Create models directory
-   mkdir -p public/models
-   
-   # Add your GLB file
-   cp /path/to/muscle_male.glb public/models/
-   \`\`\`
-
-4. The app will automatically detect and use the GLB model on next reload.
-
-## Project Structure
+## 📁 Project Structure
 
 \`\`\`
 gymbuddy/
 ├── app/
-│   ├── page.tsx              # Dashboard with 3D scene
+│   ├── page.tsx              # Dashboard with muscle selector
 │   ├── progress/page.tsx     # Progress tracking page
 │   ├── programs/page.tsx     # Workout programs page
+│   ├── api/exercises/        # ExerciseDB API routes
 │   └── layout.tsx            # Root layout
 ├── components/
-│   ├── muscle-model.tsx      # GLB-based 3D muscle model
-│   ├── fallback-muscle-model.tsx # Fallback geometry component
-│   ├── body-canvas.tsx       # Canvas setup with lighting
+│   ├── body-selector.tsx     # 2D muscle anatomy selector
 │   ├── muscle-panel.tsx      # Slide-in info panel
 │   ├── navigation.tsx        # Top navigation bar
 │   └── ui/                   # shadcn/ui components
 ├── lib/
 │   ├── store.ts              # Zustand state management
-│   └── muscle-map.ts         # Muscle metadata & mapping (single source of truth)
+│   ├── muscle-map.ts         # Muscle metadata & mapping
+│   └── api/                  # ExerciseDB API client
 └── public/
-    └── models/               # 3D model assets (optional)
+    └── placeholder.svg       # Image placeholders
 \`\`\`
 
-## Muscle Mapping System
+## 🎯 Muscle Mapping System
 
-The app uses a sophisticated mapping system to connect GLB mesh names to muscle metadata:
+The app uses a comprehensive mapping system to connect muscle groups to exercises:
 
 \`\`\`typescript
 // lib/muscle-map.ts
@@ -105,11 +85,11 @@ export const nameToMuscle: Record<string, MuscleMeta> = {
     exercises: ['Bench Press', 'Incline DB Press', 'Cable Fly'],
     // ... more metadata
   },
-  // ... more muscles
+  // ... 18 muscle groups total
 }
 \`\`\`
 
-## Color System
+## 🎨 Color System
 
 - **Background**: `#0b0b0b` (near black)
 - **Cards**: `#111111` (dark gray)
@@ -118,7 +98,7 @@ export const nameToMuscle: Record<string, MuscleMeta> = {
 - **Accent**: `#00e5ff` (electric cyan)
 - **Border**: `#2a2a2a` (subtle gray)
 
-## Deployment
+## 🚀 Deployment
 
 Deploy to Vercel with one click:
 
@@ -132,13 +112,15 @@ vercel
 
 Or connect your GitHub repository to Vercel for automatic deployments.
 
-## Performance
+Don't forget to add your `RAPIDAPI_KEY` environment variable in the Vercel dashboard.
 
-- **Adaptive DPR**: Automatically adjusts pixel ratio based on device performance
-- **Lazy Loading**: 3D scene loads with Suspense boundaries
-- **Optimized Materials**: Emissive highlighting with minimal overhead
-- **Preloading**: GLB assets preloaded for instant interaction
+## ⚡ Performance
 
-## License
+- **SVG-Based**: Lightweight 2D muscle diagrams load instantly
+- **API Caching**: 24-hour cache for ExerciseDB responses
+- **Lazy Loading**: Components load with Suspense boundaries
+- **Optimized Images**: Exercise GIFs loaded on-demand
+
+## 📝 License
 
 MIT
