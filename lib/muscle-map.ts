@@ -189,3 +189,8 @@ export const nameToMuscle: Record<string, MuscleMeta> = {
 export function getMuscleById(id: MuscleId): MuscleMeta | undefined {
   return Object.values(nameToMuscle).find((m) => m.id === id)
 }
+
+// Helper to get muscle by group name
+export function getMuscleByGroup(groupName: string): MuscleMeta | undefined {
+  return Object.values(nameToMuscle).find((m) => m.group === groupName)
+}

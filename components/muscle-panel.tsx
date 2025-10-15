@@ -2,7 +2,7 @@
 
 import { X, Loader2 } from "lucide-react"
 import { useMuscleStore } from "@/lib/store"
-import { getMuscleById } from "@/lib/muscle-map"
+import { getMuscleById, nameToMuscle } from "@/lib/muscle-map"
 import { motion, AnimatePresence } from "framer-motion"
 import { useEffect, useState } from "react"
 import type { ExerciseDBExercise } from "@/lib/api/types"
@@ -12,7 +12,9 @@ export function MusclePanel() {
   const [exercises, setExercises] = useState<ExerciseDBExercise[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const muscle = getMuscleById(selectedMuscle)
+  const muscle = selectedMuscle
+    ? Object.values(nameToMuscle).find((m) => m.group === selectedMuscle) || getMuscleById(selectedMuscle)
+    : null
 
   useEffect(() => {
     if (!muscle) return
@@ -52,7 +54,7 @@ export function MusclePanel() {
         transition={{ type: "spring", damping: 30, stiffness: 300 }}
         className="absolute right-0 top-0 z-40 h-full w-full max-w-md border-l border-white/10 bg-[#111111] md:w-96"
       >
-        <div className="flex h-full flex-col">
+        <div className="flex h-full flex-col pt-16">
           {/* Header */}
           <div className="flex items-center justify-between border-b border-white/10 p-6">
             <div>
